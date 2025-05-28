@@ -16,6 +16,7 @@ namespace WebApplication1.Data
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<Instructor> Instructors { get; set; } = null!;
         public DbSet<Course> Courses { get; set; } = null!;
+        public DbSet<AspUser> AspUsers { get; set; } = null!;
         
     }
 }

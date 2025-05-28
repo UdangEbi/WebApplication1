@@ -333,3 +333,6 @@ C:\Users\Febby\Videos\Semester 4\Desain Restful API\WebApplication1\obj\Debug\ne
 C:\Users\Febby\Videos\Semester 4\Desain Restful API\WebApplication1\obj\Debug\net9.0\WebApplication1.pdb
 C:\Users\Febby\Videos\Semester 4\Desain Restful API\WebApplication1\obj\Debug\net9.0\WebApplication1.genruntimeconfig.cache
 C:\Users\Febby\Videos\Semester 4\Desain Restful API\WebApplication1\obj\Debug\net9.0\ref\WebApplication1.dll
+C:\Users\Febby\Videos\Semester 4\Desain Restful API\WebApplication1\obj\Debug\net9.0\WebApplication1.sourcelink.json
+C:\Users\Febby\Videos\Semester 4\Desain Restful API\WebApplication1\bin\Debug\net9.0\AutoMapper.dll
+C:\Users\Febby\Videos\Semester 4\Desain Restful API\WebApplication1\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

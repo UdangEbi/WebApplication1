@@ -66,5 +66,15 @@ namespace WebApplication1.Data
             }
             return existingInstructor;
         }
+
+        public IEnumerable<Instructor> GetAllInstructors()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Instructor GetInstructorByIdCourse(int courseId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

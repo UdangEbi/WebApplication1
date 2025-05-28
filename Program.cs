@@ -20,6 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ICategory, CategoryEF>();
 builder.Services.AddScoped<ICourse, CourseEF>();
 builder.Services.AddScoped<IInstructor, InstructorEF>();
+builder.Services.AddScoped<IAspUser, AspUserEF>();
 // builder.Services.AddSingleton<IInstructor, InstructorADO>();
 // builder.Services.AddSingleton<ICourse, CourseADO>();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -33,6 +34,32 @@ var app = builder.Build();
 // }
 
 app.UseHttpsRedirection();
+app.MapGet("api/v1/cekpassword/{password}", (string password) =>
+{
+    var pass = WebApplication1.Helpers.HashHelper.HashPassword(password);
+    return Results.Ok($"Password : {password} Hash: {pass}");
+});
+
+app.MapPost("api/v1/register", (IAspUser aspUserData, AspUser user) =>
+{
+    var newUser = aspUserData.RegisterUser(user);
+    return Results.Created($"/api/v1/users/{newUser.Username}", newUser);
+});
+
+app.MapPost("api/v1/login", (IAspUser aspUserData, AspUser loginData) =>
+{
+    bool isValid = aspUserData.Login(loginData.Username, loginData.Password);
+    if (!isValid)
+    {
+        return Results.Unauthorized();
+    }
+
+    return Results.Ok(new
+    {
+        message = "Login successful",
+        username = loginData.Username
+    });
+});
 
 
 // app.MapGet("api/v1/helloservices", (string id)=> 
@@ -106,58 +133,58 @@ app.UseHttpsRedirection();
 //     return Results.NoContent();
 // });
 
-app.MapGet("api/v1/courses", (ICourse courseData, IMapper mapper)=>
-{
-    var courses = courseData.GetAllCourses();
-    var courseDTOs = mapper.Map<IEnumerable<CourseDTO>>(courses);
-    return Results.Ok(courseDTOs);
-});
+// app.MapGet("api/v1/courses", (ICourse courseData, IMapper mapper)=>
+// {
+//     var courses = courseData.GetAllCourses();
+//     var courseDTOs = mapper.Map<IEnumerable<CourseDTO>>(courses);
+//     return Results.Ok(courseDTOs);
+// });
 
-app.MapGet("api/v1/courses/{id}", (ICourse courseData, IMapper mapper, int id) =>
-{
-    var course = courseData.GetCourseByIdCourse(id);
-    if (course == null) return Results.NotFound();
+// app.MapGet("api/v1/courses/{id}", (ICourse courseData, IMapper mapper, int id) =>
+// {
+//     var course = courseData.GetCourseByIdCourse(id);
+//     if (course == null) return Results.NotFound();
 
-    var courseDTO = mapper.Map<CourseDTO>(course);
-    return Results.Ok(courseDTO);
-});
+//     var courseDTO = mapper.Map<CourseDTO>(course);
+//     return Results.Ok(courseDTO);
+// });
 
-app.MapPost("api/v1/courses", (ICourse courseData, IMapper mapper, CourseAddDTO courseAddDTO) =>
-{
-    var course = mapper.Map<Course>(courseAddDTO);
-    var added = courseData.AddCourse(course);
-    var courseDTO = mapper.Map<CourseDTO>(added);
-    return Results.Ok(courseDTO); 
-});
+// app.MapPost("api/v1/courses", (ICourse courseData, IMapper mapper, CourseAddDTO courseAddDTO) =>
+// {
+//     var course = mapper.Map<Course>(courseAddDTO);
+//     var added = courseData.AddCourse(course);
+//     var courseDTO = mapper.Map<CourseDTO>(added);
+//     return Results.Ok(courseDTO); 
+// });
 
-app.MapPut("api/v1/courses", (ICourse courseData, IMapper mapper, Course course) =>
-{
-    var existingCourse = courseData.GetCourseByIdCourse(course.CourseId);
-    if (existingCourse == null)
-        return Results.NotFound();
+// app.MapPut("api/v1/courses", (ICourse courseData, IMapper mapper, Course course) =>
+// {
+//     var existingCourse = courseData.GetCourseByIdCourse(course.CourseId);
+//     if (existingCourse == null)
+//         return Results.NotFound();
 
-    existingCourse.CourseName = course.CourseName;
-    existingCourse.CourseDescription = course.CourseDescription;
-    existingCourse.Duration = course.Duration;
-    existingCourse.CategoryId = course.CategoryId;
-    existingCourse.InstructorId = course.InstructorId;
+//     existingCourse.CourseName = course.CourseName;
+//     existingCourse.CourseDescription = course.CourseDescription;
+//     existingCourse.Duration = course.Duration;
+//     existingCourse.CategoryId = course.CategoryId;
+//     existingCourse.InstructorId = course.InstructorId;
 
-    var updated = courseData.UpdateCourse(existingCourse);
-    var courseDTO = mapper.Map<CourseDTO>(updated);
-    return Results.Ok(courseDTO);
-});
-app.MapDelete("api/v1/courses/{id}", (ICourse courseData, int id) =>
-{
-    try
-    {
-        courseData.DeleteCourse(id);
-        return Results.NoContent();
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem(ex.Message);
-    }
-});
+//     var updated = courseData.UpdateCourse(existingCourse);
+//     var courseDTO = mapper.Map<CourseDTO>(updated);
+//     return Results.Ok(courseDTO);
+// });
+// app.MapDelete("api/v1/courses/{id}", (ICourse courseData, int id) =>
+// {
+//     try
+//     {
+//         courseData.DeleteCourse(id);
+//         return Results.NoContent();
+//     }
+//     catch (Exception ex)
+//     {
+//         return Results.Problem(ex.Message);
+//     }
+// });
 
 app.Run();
 

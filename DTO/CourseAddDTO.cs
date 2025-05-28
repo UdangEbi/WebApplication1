@@ -13,7 +13,6 @@ namespace WebApplication1.DTO
         public int CategoryId {get; set; }
         public int InstructorId {get; set; }
         public CategoryDTO? Category { get; set; }
-
         public InstructorDTO? Instructor {get; set;}
     }
 }

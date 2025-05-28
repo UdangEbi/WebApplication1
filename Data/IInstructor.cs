@@ -8,10 +8,11 @@ namespace WebApplication1.Data
 {
     public interface IInstructor
     {
-        IEnumerable<Instructor> GetInstructor();
+        IEnumerable<Instructor> GetAllInstructors();
         Instructor GetInstructorById(int instructorId);
         Instructor AddInstructor(Instructor instructor);
         Instructor UpdateInstructor(Instructor instructor);
-        void DeleteInstructor(int instructorId);
+        void DeleteInstructor(int instructorId);  
+        Instructor GetInstructorByIdCourse(int courseId);
     }
 }
